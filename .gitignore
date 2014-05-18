@@ -19,3 +19,8 @@
 *.exe
 *.out
 *.app
+
+# Project Files
+*.cbp
+*.depend
+*.layout
