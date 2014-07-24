@@ -155,20 +155,20 @@ bool savelist(HWND hwnd)
 bool loadlist(wchar_t *filename)
 {
     int n,i=0;
-    char line[256];
+    char line[2048];
     FILE *f=_wfopen(filename,L"rt");
     if(f)
     {
         global_lablelist.setid(0);
         //Erste Zeile:
-        n=readline(line,250,f);
+        n=readline(line,2040,f);
         if(strcmp(line,"TestMan-Vb01!")==0)
         {
             free_item();
             ini_item();
             while(n!=0)
             {
-                n=readline(line,250,f);
+                n=readline(line,2040,f);
                 if(n!=0 && strcmpmin(line,"TITLE:")==0)
                 {
                     SetWindowText(hwndCB,&line[6]);

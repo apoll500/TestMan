@@ -455,9 +455,9 @@ LRESULT CALLBACK OutWindowProcedure(HWND hwnd,UINT message,WPARAM wParam,LPARAM 
                     }
                     else if((HWND)lParam==hwndOBu02)
                     {
-                        int len=SendMessage(hwndText1,WM_GETTEXTLENGTH,0,0);
+                        int len=SendMessage(hwndText0,WM_GETTEXTLENGTH,0,0);
                         char *a=(char *)malloc((len+1)*sizeof(char));
-                        len=SendMessage(hwndText1,WM_GETTEXT,len+1,(LPARAM)a);
+                        len=SendMessage(hwndText0,WM_GETTEXT,2*len+1,(LPARAM)a);
                         a[len]=0;
                         item *ti=global_list->findnext(global_selline+global_scrolly_out);
                         if(ti)
