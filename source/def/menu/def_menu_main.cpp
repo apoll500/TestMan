@@ -13,11 +13,12 @@ void setup_main_menu(HWND hwnd,MenuHelper_Interface *m)
     m->createNewMenuPoint(t0,DEF_MENU_MAIN_FILE_SAVE,"&Save...");
     m->createNewMenuPoint(t0,DEF_MENU_MAIN_FILE_SAVEAS,"&Save as...");
     m->createNewMenuPoint(t0,DEF_MENU_MAIN_FILE_EXIT,"&Exit");
-    int t1=m->createNewMenuTitle("&Edit");
-    m->createNewMenuPoint(t1,DEF_MENU_MAIN_EDIT_CONF,"&Config");
-    m->createNewMenuPoint(t1,DEF_MENU_MAIN_EDIT_MODE,"&Grid edit-mode (on/off)");
+    //int t1=m->createNewMenuTitle("&Edit");
+    //m->createNewMenuPoint(t1,DEF_MENU_MAIN_EDIT_CONF,"&Config");
+    //m->createNewMenuPoint(t1,DEF_MENU_MAIN_EDIT_MODE,"&Grid edit-mode (on/off)");
     int t2=m->createNewMenuTitle("&Run");
     m->createNewMenuPoint(t2,DEF_MENU_MAIN_RUN_ALL,"&Run all");
+    m->createNewMenuPoint(t2,DEF_MENU_MAIN_RUN_RESET,"Re&set all");
     int t9=m->createNewMenuTitle("&Help");
     m->createNewMenuPoint(t9,DEF_MENU_MAIN_HELP_ABOUT,"&About");
     m->select(hwnd);

@@ -272,6 +272,9 @@ LRESULT CALLBACK MainWindowProcedure2(HWND hwnd,UINT message,WPARAM wParam,LPARA
                 case DEF_MENU_MAIN_RUN_ALL:
                     runalltests();
                     break;
+                case DEF_MENU_MAIN_RUN_RESET:
+                    resetalltests();
+                    break;
                 case DEF_MENU_MAIN_HELP_ABOUT:
                     showAbout(hwnd);
                     break;

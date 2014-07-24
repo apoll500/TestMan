@@ -16,6 +16,15 @@ void runalltests(void)
         i=i->findnext();
     }
 }
+void resetalltests(void)
+{
+    item *i=global_list;
+    while(i!=0)
+    {
+        i->setcolor(RGB(255,255,255));
+        i=i->findnext();
+    }
+}
 char *item::runtest()
 {
     SendMessageA(hwndText0,WM_SETTEXT,0,(LPARAM)(getfile()));

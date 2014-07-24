@@ -12,6 +12,7 @@
 #define MAXCOLS 17
 
 void runalltests(void);
+void resetalltests(void);
 
 void ini_item(void);
 void free_item(void);
