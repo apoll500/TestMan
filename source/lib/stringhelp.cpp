@@ -3,7 +3,6 @@
 *  Funktionen zur Manipulation von Strings         *
 *                                                  *
 ***************************************************/
-
 #include "stringhelp.h"
 
 void strtowcs(char *in,wchar_t *out)
@@ -39,4 +38,31 @@ int cutrightwcs2(wchar_t *a,wchar_t s)
 		}
 	}
 	return r;
+}
+char *strcpyn(char *a,const char *b,int n)
+{
+    //Maximal n Bytes von b nach a kopieren.
+    //b muss ein nullterminierter String sein.
+    //a wird automatisch nullterminiert.
+    //Der Speicher fuer a muss ausreichend gross sein.
+    //Rueckgabewert: a
+    int i=0;
+    while(i<n && b[i]!=0)
+    {
+        a[i]=b[i];
+        i=i+1;
+    }
+    a[i]=0;
+    return a;
+}
+int strcmpmin(const char *a,const char *b)
+{
+    int i=0,r=0;
+    while(a[i]!=0 && b[i]!=0)
+    {
+        r=a[i]-b[i];
+        if(r)return r;
+        i++;
+    }
+    return r;
 }

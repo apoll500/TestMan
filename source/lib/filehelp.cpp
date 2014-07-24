@@ -3,7 +3,6 @@
 *  Some usefull functions for file-I/O.            *
 *                                                  *
 ***************************************************/
-
 #include "filehelp.h"
 
 int c_pathtype(wchar_t *path)
@@ -33,4 +32,15 @@ int c_pathtype(wchar_t *path)
 		}
 	}
 	return isabs+isdir*2;
+}
+int readline(char *line,int maxln,FILE *f)
+{
+    int i=0;
+    line[i]=fgetc(f);
+    while(!feof(f) && line[i]!='\n' && line[i]!='\r' && i<maxln)
+    {
+        line[++i]=fgetc(f);
+    }
+    line[i]=0;
+    return i;
 }

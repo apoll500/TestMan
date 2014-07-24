@@ -3,11 +3,62 @@
 *  ITEMS                                           *
 *                                                  *
 ***************************************************/
-
 #include "item.h"
 
 item *global_list;
 
+void runalltests(void)
+{
+    item *i=global_list;
+    while(i!=0)
+    {
+        i->runtest();
+        i=i->findnext();
+    }
+}
+char *item::runtest()
+{
+    SendMessageA(hwndText0,WM_SETTEXT,0,(LPARAM)(getfile()));
+    //setcolor(RGB(222,222,222));
+    if(run[0]==0)
+    {
+        SendMessageA(hwndText1,WM_SETTEXT,0,(LPARAM)"No valid command to execute.\r\nPlease enter a command first.");
+        setcolor(RGB(255,255,255));
+        return 0;
+    }
+    int u=xCreatePipe();
+    int v=xCreatePipe();
+    PROCESS_INFORMATION pi=xCreateProcess(run,u,v);
+    xClosePipeHandle(u,1);
+    char *rr=xReadFromPipe(u);
+    DWORD return_val;
+    GetExitCodeProcess(pi.hProcess,&return_val);
+    CloseSubProcess(pi);
+    xCloseAllPipes();
+
+    rr=(char *)realloc(rr,(strlen(rr)+100)*sizeof(char));
+    sprintf(&rr[strlen(rr)],"\n\r\n\rProcess returned (%d)\n",(unsigned int)return_val);
+
+    SetWindowText(hwndText1,rr);
+
+    if(strcmp(file,rr)==0)
+    {
+        setcolor(RGB(55,255,0));
+    }
+    else
+    {
+        setcolor(RGB(255,55,0));
+    }
+
+    return 0;
+}
+void item::setcolor(COLORREF c)
+{
+    if(global_lablelist.getid()<0 || global_lablelist.getid()>=MAXCOLS)return;
+    color[global_lablelist.getid()]=c;
+    fillall();
+    //grid->setcolor(hwnd,global_lablelist.getid(),global_selline,c);
+}
 void ini_item(void)
 {
     int i;
@@ -21,7 +72,6 @@ void ini_item(void)
         p=t;
     }
 }
-
 void free_item(void)
 {
     item *n,*c=global_list;
@@ -33,7 +83,27 @@ void free_item(void)
     }
     delete c;
 }
-
+void cut_item(void)
+{
+    int i;
+    item *n=global_list,*c=global_list;
+    while(c->findnext()!=0)
+    {
+        c=c->findnext();
+        if(c->getname()[0]!=0)
+        {
+            n=c;
+        }
+        for(i=0;i<MAXCOLS;i++)
+        {
+            if(c->getcolor(i)!=RGB(255,255,255) || c->getsymbol(i)!=0)
+            {
+                n=c;
+            }
+        }
+    }
+    n->setnextitem(0);
+}
 unsigned char trc_64(unsigned char c)
 {
 	if(c==0){c=43;}
@@ -42,7 +112,6 @@ unsigned char trc_64(unsigned char c)
 	else{c=c+59;}
 	return c;
 }
-
 unsigned char trc_64u(unsigned char c)
 {
 	if(c==43){c=0;}
@@ -51,7 +120,6 @@ unsigned char trc_64u(unsigned char c)
 	else{c=c-59;}
 	return c;
 }
-
 unsigned char *c_datatostr_64(void *v,long vln)
 {
 	//Daten in String umwandeln
@@ -96,7 +164,6 @@ unsigned char *c_datatostr_64(void *v,long vln)
 	//(wchar_t *)v
 	return c;
 }
-
 void *c_strtodata_64(unsigned char *c)
 {
 	//String in Daten umwandeln

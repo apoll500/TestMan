@@ -3,40 +3,18 @@
 *  Windows-Dialoge                                 *
 *                                                  *
 ***************************************************/
-
 #include "dialog.h"
 
 wchar_t *EWIN_TXT_CDIR;
 wchar_t *DOC_FILENAME;
-COLORREF *COLOR_CUSTCOLS;
-COLORREF COLOR_LASTCOL;
-
-char *PROG1;
-char *PROG2;
-char *PROG3;
-char *EXTE1;
-char *EXTE2;
-char *EXTE3;
-char *OUTP1;
-char *OUTP2;
-char *OUTP3;
-
 bool ischanged;
 
 bool ini_dialog(void)
 {
-    int i;
     DOC_FILENAME=0;
     ini_progdir();
-    loadconf();
-
-    COLOR_CUSTCOLS=(COLORREF *)malloc(16*sizeof(COLORREF));
-    for(i=0;i<16;i++)COLOR_CUSTCOLS[i]=RGB(255,255,255);
-    COLOR_LASTCOL=RGB(255,255,255);
-
     return true;
 }
-
 void free_filename(void)
 {
     if(DOC_FILENAME!=0)
@@ -45,139 +23,16 @@ void free_filename(void)
     }
     DOC_FILENAME=0;
 }
-
 bool free_dialog(void)
 {
-    free(COLOR_CUSTCOLS);
     free_filename();
-
-    free(PROG1);
-    free(PROG2);
-    free(PROG3);
-    free(EXTE1);
-    free(EXTE2);
-    free(EXTE3);
-    free(OUTP1);
-    free(OUTP2);
-    free(OUTP3);
-
     return true;
 }
-
 bool openconf(void)
 {
     ShellExecute(hwnd,"open","testman.conf",NULL,NULL,5);
     return true;
 }
-
-bool loadconf(void)
-{
-
-    PROG1=0;
-    PROG2=0;
-    PROG3=0;
-    EXTE1=0;
-    EXTE2=0;
-    EXTE3=0;
-    OUTP1=0;
-    OUTP2=0;
-    OUTP3=0;
-
-    int n;
-    char line[512];
-    FILE *f=fopen("testman.conf","rt");
-    if(f)
-    {
-        n=readline(line,511,f);
-        while(n)
-        {
-            if(n!=0 && strcmpmin(line,"prog1=")==0)
-            {
-                PROG1=(char *)malloc((strlen(&line[6])+1)*sizeof(char));
-                strcpy(PROG1,&line[6]);
-            }
-            else if(n!=0 && strcmpmin(line,"prog2=")==0)
-            {
-                PROG2=(char *)malloc((strlen(&line[6])+1)*sizeof(char));
-                strcpy(PROG2,&line[6]);
-            }
-            else if(n!=0 && strcmpmin(line,"prog3=")==0)
-            {
-                PROG3=(char *)malloc((strlen(&line[6])+1)*sizeof(char));
-                strcpy(PROG3,&line[6]);
-            }
-            else if(n!=0 && strcmpmin(line,"exte1=")==0)
-            {
-                EXTE1=(char *)malloc((strlen(&line[6])+1)*sizeof(char));
-                strcpy(EXTE1,&line[6]);
-            }
-            else if(n!=0 && strcmpmin(line,"exte2=")==0)
-            {
-                EXTE2=(char *)malloc((strlen(&line[6])+1)*sizeof(char));
-                strcpy(EXTE2,&line[6]);
-            }
-            else if(n!=0 && strcmpmin(line,"exte3=")==0)
-            {
-                EXTE3=(char *)malloc((strlen(&line[6])+1)*sizeof(char));
-                strcpy(EXTE3,&line[6]);
-            }
-            else if(n!=0 && strcmpmin(line,"outp1=")==0)
-            {
-                OUTP1=(char *)malloc((strlen(&line[6])+1)*sizeof(char));
-                strcpy(OUTP1,&line[6]);
-            }
-            else if(n!=0 && strcmpmin(line,"outp2=")==0)
-            {
-                OUTP2=(char *)malloc((strlen(&line[6])+1)*sizeof(char));
-                strcpy(OUTP2,&line[6]);
-            }
-            else if(n!=0 && strcmpmin(line,"outp3=")==0)
-            {
-                OUTP3=(char *)malloc((strlen(&line[6])+1)*sizeof(char));
-                strcpy(OUTP3,&line[6]);
-            }
-            n=readline(line,511,f);
-        }
-        fclose(f);
-    }
-
-    if(PROG1==0){PROG1=(char *)malloc(10);PROG1[0]=0;}
-    if(PROG2==0){PROG2=(char *)malloc(10);PROG2[0]=0;}
-    if(PROG3==0){PROG3=(char *)malloc(10);PROG3[0]=0;}
-    if(EXTE1==0){EXTE1=(char *)malloc(10);EXTE1[0]=0;}
-    if(EXTE2==0){EXTE2=(char *)malloc(10);EXTE2[0]=0;}
-    if(EXTE3==0){EXTE3=(char *)malloc(10);EXTE3[0]=0;}
-    if(OUTP1==0){OUTP1=(char *)malloc(10);OUTP1[0]=0;}
-    if(OUTP2==0){OUTP2=(char *)malloc(10);OUTP2[0]=0;}
-    if(OUTP3==0){OUTP3=(char *)malloc(10);OUTP3[0]=0;}
-
-    return true;
-}
-
-bool setcolor(int x,int y,HWND hwnd)
-{
-    CHOOSECOLOR cc;
-    memset(&cc,0,sizeof(cc));
-    cc.lStructSize=sizeof(cc);
-    cc.Flags=CC_ANYCOLOR|CC_RGBINIT;
-    cc.lpCustColors=COLOR_CUSTCOLS;
-    cc.rgbResult=COLOR_LASTCOL;
-    if(ChooseColorA(&cc))
-    {
-        COLOR_LASTCOL=cc.rgbResult;
-        item *todo=global_list->findnext(y-2+global_scrolly);
-        if(todo)
-        {
-            todo->setcolor(x-13,COLOR_LASTCOL);
-        }
-        RECT r=getrect2(x,y);
-        InvalidateRect(hwnd,&r,1);
-
-        ischanged=true;
-    }
-    return true;
-}
-
 bool openlist(HWND hwnd)
 {
     OPENFILENAMEW fn;
@@ -213,7 +68,6 @@ bool openlist(HWND hwnd)
     }
     return false;
 }
-
 bool savelistas(HWND hwnd)
 {
     OPENFILENAMEW fn;
@@ -247,13 +101,17 @@ bool savelistas(HWND hwnd)
     }
     return false;
 }
-
 bool savelist(HWND hwnd)
 {
+    int i;
+    char *b;
+
     if(DOC_FILENAME==0 || DOC_FILENAME[0]==0)
     {
         return savelistas(hwnd);
     }
+
+    cut_item();
 
     char a[200];
     *((int *)a)=50;
@@ -269,6 +127,19 @@ bool savelist(HWND hwnd)
         fwrite(a,ln,sizeof(char),f);
         fwrite("\n",1,sizeof(char),f);
         fwrite("-------------\n",14,sizeof(char),f);
+        for(i=0;i<MAXCOLS;i++)
+        {
+            fwrite("LABLE:",6,sizeof(char),f);
+            fwrite(global_lablelist.gettext(i),strlen(global_lablelist.gettext(i)),sizeof(char),f);
+            fwrite("\n",1,sizeof(char),f);
+        }
+        fwrite("COLID:",6,sizeof(char),f);
+        i=global_lablelist.getid();
+        b=(char *)c_datatostr_64(&i,sizeof(int));
+        fwrite(b,strlen(b),sizeof(char),f);
+        free(b);
+        fwrite("\n",1,sizeof(char),f);
+        fwrite("-------------\n",14,sizeof(char),f);
         global_list->write(f);
         fclose(f);
 
@@ -281,7 +152,6 @@ bool savelist(HWND hwnd)
 
     return true;
 }
-
 bool loadlist(wchar_t *filename)
 {
     int n,i=0;
@@ -289,6 +159,7 @@ bool loadlist(wchar_t *filename)
     FILE *f=_wfopen(filename,L"rt");
     if(f)
     {
+        global_lablelist.setid(0);
         //Erste Zeile:
         n=readline(line,250,f);
         if(strcmp(line,"TestMan-Vb01!")==0)
@@ -301,6 +172,18 @@ bool loadlist(wchar_t *filename)
                 if(n!=0 && strcmpmin(line,"TITLE:")==0)
                 {
                     SetWindowText(hwndCB,&line[6]);
+                }
+                if(n!=0 && strcmpmin(line,"LABLE:")==0)
+                {
+                    global_lablelist.setnexttext(&line[6]);
+                }
+                if(n!=0 && strcmpmin(line,"COLID:")==0)
+                {
+                    int *h=(int *)c_strtodata_64((unsigned char *)&line[6]);
+                    grid->select(hwnd,0,0);
+                    grid->select(hwnd,1,0);
+                    grid->select(hwnd,*h,0);
+                    free(h);
                 }
                 else if(n!=0 && strcmpmin(line,"ITEM:")==0)
                 {
@@ -322,6 +205,23 @@ bool loadlist(wchar_t *filename)
                     if(hi1!=0)hi1->setsymbols(cs);
                     free(cs);
                 }
+                else if(n!=0 && strcmpmin(line,"RUN:")==0)
+                {
+                    item *hhi=global_list->findnext(i-1);
+                    if(hhi!=0)hhi->setrun(&line[4]);
+                }
+                else if(n!=0 && strcmpmin(line,"OUT:")==0)
+                {
+                    item *hhi=global_list->findnext(i-1);
+                    if(hhi!=0)hhi->setout(&line[4]);
+                }
+                else if(n!=0 && strcmpmin(line,"FILE:")==0)
+                {
+                    char *a=(char *)c_strtodata_64((unsigned char *)&line[5]);
+                    item *hi1=global_list->findnext(i-1);
+                    if(hi1!=0)hi1->setfile(a);
+                    free(a);
+                }
             }
             ischanged=false;
         }
@@ -335,33 +235,11 @@ bool loadlist(wchar_t *filename)
     {
         MessageBoxA(hwnd,"Öffnen der Datei fehlgeschlagen!","Info",0);
     }
+
+    fillall();
+
     return true;
 }
-
-int readline(char *line,int maxln,FILE *f)
-{
-    int i=0;
-    line[i]=fgetc(f);
-    while(!feof(f) && line[i]!='\n' && line[i]!='\r' && i<maxln)
-    {
-        line[++i]=fgetc(f);
-    }
-    line[i]=0;
-    return i;
-}
-
-int strcmpmin(const char *a,const char *b)
-{
-    int i=0,r=0;
-    while(a[i]!=0 && b[i]!=0)
-    {
-        r=a[i]-b[i];
-        if(r)return r;
-        i++;
-    }
-    return r;
-}
-
 void ini_progdir(void)
 {
     wchar_t *f;//Zeiger auf Dateinamen

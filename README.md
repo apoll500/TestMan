@@ -1,5 +1,4 @@
 TestMan
 =======
 
-Test-Manager
-
+A graphical user interface for testing executables.

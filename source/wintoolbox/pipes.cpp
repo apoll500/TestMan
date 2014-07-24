@@ -3,7 +3,6 @@
 *  Pipes.                                          *
 *                                                  *
 ***************************************************/
-
 #include "pipes.h"
 
 void ErrorExit(const char *lpszFunction)
@@ -34,7 +33,6 @@ unsigned long WriteToPipe(char *text,HANDLE pipewh)
    WriteFile(pipewh,text,strlen(text),&lnw,NULL);
    return lnw;
 }
-
 char *ReadFromPipe(HANDLE piperh)
 {
 	char *a;
@@ -77,7 +75,6 @@ char *ReadFromPipe(HANDLE piperh)
 	}
 	return a;
 }
-
 int ManagePipes(int action,HANDLE *rh)
 {
 	static SECURITY_ATTRIBUTES sat;
@@ -208,13 +205,11 @@ PROCESS_INFORMATION CreateSubProcess(char *progname,HANDLE substdoutw,HANDLE sub
       return piProcInfo;
    }
 }
-
 void CloseSubProcess(PROCESS_INFORMATION piProcInfo)
 {
     CloseHandle(piProcInfo.hProcess);
     CloseHandle(piProcInfo.hThread);
 }
-
 PROCESS_INFORMATION xCreateProcess(char *a,int u,int v)
 {
     HANDLE h1,h2;
@@ -256,7 +251,6 @@ int xWriteToPipe(char *a,int u)
     WriteToPipe(a,h1);
 	return 0;
 }
-
 int xexecute(char *program,char *command)
 {
     //*
