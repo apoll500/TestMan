@@ -286,6 +286,7 @@ public:
         //das nächste Item ausgeben:
         if(nextitem!=0)
         {
+            fwrite("-------------\n",14,sizeof(char),f);
             nextitem->write(f);
         }
     }

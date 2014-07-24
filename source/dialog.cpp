@@ -187,7 +187,8 @@ bool loadlist(wchar_t *filename)
                 }
                 else if(n!=0 && strcmpmin(line,"ITEM:")==0)
                 {
-                    SetWindowText(hwndEdit[i++],&line[5]);
+                    //SetWindowText(hwndEdit[i],&line[5]);
+                    i++;
                     item *hhi=global_list->findnext(i-1);
                     if(hhi!=0)hhi->setname(&line[5]);
                 }
