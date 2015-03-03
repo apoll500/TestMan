@@ -3,6 +3,11 @@
 *  Some functions supporting the creation          *
 *  and manipulation of grid-objects.               *
 *                                                  *
+*  ----------------------------------------------  *
+*                                                  *
+*  This file is part of TestMan!                   *
+*  Copyright 2015 by Andreas Pollhammer            *
+*                                                  *
 ***************************************************/
 #include "grid.h"
 

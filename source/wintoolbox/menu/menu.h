@@ -1,3 +1,13 @@
+/***************************************************
+*                                                  *
+*                                                  *
+*                                                  *
+*  ----------------------------------------------  *
+*                                                  *
+*  This file is part of TestMan!                   *
+*  Copyright 2015 by Andreas Pollhammer            *
+*                                                  *
+***************************************************/
 #ifndef WINTOOLBOX_MENUHELPER_H
 #define WINTOOLBOX_MENUHELPER_H
 

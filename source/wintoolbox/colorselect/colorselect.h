@@ -1,3 +1,13 @@
+/***************************************************
+*                                                  *
+*                                                  *
+*                                                  *
+*  ----------------------------------------------  *
+*                                                  *
+*  This file is part of TestMan!                   *
+*  Copyright 2015 by Andreas Pollhammer            *
+*                                                  *
+***************************************************/
 #ifndef COLORSELECT_H
 #define COLORSELECT_H
 

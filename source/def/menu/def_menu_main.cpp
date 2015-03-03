@@ -2,6 +2,11 @@
 *                                                  *
 *  The menu of the main window.                    *
 *                                                  *
+*  ----------------------------------------------  *
+*                                                  *
+*  This file is part of TestMan!                   *
+*  Copyright 2015 by Andreas Pollhammer            *
+*                                                  *
 ***************************************************/
 #include "def_menu_main.h"
 

@@ -3,6 +3,11 @@
 *  Some functions supporting the creation          *
 *  and manipulation of menus and menu entrys.      *
 *                                                  *
+*  ----------------------------------------------  *
+*                                                  *
+*  This file is part of TestMan!                   *
+*  Copyright 2015 by Andreas Pollhammer            *
+*                                                  *
 ***************************************************/
 #ifndef WINTOOLBOX_GRID_INTER_H
 #define WINTOOLBOX_GRID_INTER_H

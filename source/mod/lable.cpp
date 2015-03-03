@@ -2,6 +2,11 @@
 *                                                  *
 *  LABLES                                          *
 *                                                  *
+*  ----------------------------------------------  *
+*                                                  *
+*  This file is part of TestMan!                   *
+*  Copyright 2015 by Andreas Pollhammer            *
+*                                                  *
 ***************************************************/
 #include "lable.h"
 

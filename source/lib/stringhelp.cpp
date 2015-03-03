@@ -2,6 +2,11 @@
 *                                                  *
 *  Funktionen zur Manipulation von Strings         *
 *                                                  *
+*  ----------------------------------------------  *
+*                                                  *
+*  This file is part of TestMan!                   *
+*  Copyright 2015 by Andreas Pollhammer            *
+*                                                  *
 ***************************************************/
 #include "stringhelp.h"
 

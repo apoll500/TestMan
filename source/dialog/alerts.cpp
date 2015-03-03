@@ -1,6 +1,11 @@
 /***************************************************
 *                                                  *
-*  Some dialogs.                                   *
+*  Some message boxes.                             *
+*                                                  *
+*  ----------------------------------------------  *
+*                                                  *
+*  This file is part of TestMan!                   *
+*  Copyright 2015 by Andreas Pollhammer            *
 *                                                  *
 ***************************************************/
 #include "alerts.h"

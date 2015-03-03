@@ -2,6 +2,11 @@
 *                                                  *
 *  MAIN                                            *
 *                                                  *
+*  ----------------------------------------------  *
+*                                                  *
+*  This file is part of TestMan!                   *
+*  Copyright 2015 by Andreas Pollhammer            *
+*                                                  *
 ***************************************************/
 #define RASTER_X 20
 #define RASTER_Y 20
@@ -154,6 +159,7 @@ bool ini_windowsetup(HINSTANCE hThisInstance,int nCmdShow)
     hwndOBu01=CreateWindow("BUTTON","<<",WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,400,580,50,24,hwndOut,NULL,hThisInstance,NULL);
     hwndOBu02=CreateWindow("BUTTON","apply",WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,0,580,80,24,hwndOut,NULL,hThisInstance,NULL);
     hwndOBu00=CreateWindow("BUTTON","run",WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,600,0,50,24,hwndOut,NULL,hThisInstance,NULL);
+    hwndOBu03=CreateWindow("BUTTON","run again",WS_TABSTOP | WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,455,580,70,24,hwndOut,NULL,hThisInstance,NULL);
 
     ShowWindow(hwnd,nCmdShow);
     //ShowWindow(hwndOut,nCmdShow);
@@ -182,6 +188,7 @@ int WINAPI WinMain(HINSTANCE hThisInstance,HINSTANCE hPrevInstance,LPSTR lpszArg
     MSG messages;
 
     ini_item();
+    ini_progdir();
     ini_dialog();
     ini_windraw();
     if(!ini_winclasses(hThisInstance))return 0;
@@ -206,12 +213,10 @@ int WINAPI WinMain(HINSTANCE hThisInstance,HINSTANCE hPrevInstance,LPSTR lpszArg
 }
 LRESULT CALLBACK MainWindowProcedure2(HWND hwnd,UINT message,WPARAM wParam,LPARAM lParam)
 {
-    PAINTSTRUCT ps;
-    SCROLLINFO si;
-    //RECT r;
-    //static bool lmb_status=0;
     int i;
     bool doscroll=true;
+    PAINTSTRUCT ps;
+    SCROLLINFO si;
 
     int winxx;
     int winyy;
@@ -425,7 +430,8 @@ LRESULT CALLBACK OutWindowProcedure(HWND hwnd,UINT message,WPARAM wParam,LPARAM 
             winyy=HIWORD(lParam);
             MoveWindow(hwndText0,0,50,winxx/2-2,winyy-75,1);
             MoveWindow(hwndText1,winxx/2+2,50,winxx/2-2,winyy-75,1);
-            MoveWindow(hwndOBu02,0,winyy-25,80,25,1);
+            MoveWindow(hwndOBu03,winxx/2+2+54,winyy-25,70,25,1);
+            MoveWindow(hwndOBu02,winxx/2-2-80,winyy-25,80,25,1);
             MoveWindow(hwndOBu01,winxx/2+2,winyy-25,50,25,1);
             MoveWindow(hwndOBu00,winxx-52,2,50,21,1);
             MoveWindow(hwndOEd00,80,5,winxx-375,18,1);
@@ -436,7 +442,7 @@ LRESULT CALLBACK OutWindowProcedure(HWND hwnd,UINT message,WPARAM wParam,LPARAM 
             switch(HIWORD(wParam))
             {
                 case BN_CLICKED:
-                    if((HWND)lParam==hwndOBu00)
+                    if((HWND)lParam==hwndOBu00)//run
                     {
                         item *ti=global_list->findnext(global_selline+global_scrolly_out);
                         if(ti)
@@ -444,7 +450,7 @@ LRESULT CALLBACK OutWindowProcedure(HWND hwnd,UINT message,WPARAM wParam,LPARAM 
                             ti->runtest();
                         }
                     }
-                    else if((HWND)lParam==hwndOBu01)
+                    else if((HWND)lParam==hwndOBu01)//copy
                     {
                         int len=SendMessage(hwndText1,WM_GETTEXTLENGTH,0,0);
                         char *a=(char *)malloc((len+1)*sizeof(char));
@@ -453,7 +459,7 @@ LRESULT CALLBACK OutWindowProcedure(HWND hwnd,UINT message,WPARAM wParam,LPARAM 
                         SendMessage(hwndText0,WM_SETTEXT,0,(LPARAM)a);
                         free(a);
                     }
-                    else if((HWND)lParam==hwndOBu02)
+                    else if((HWND)lParam==hwndOBu02)//apply
                     {
                         int len=SendMessage(hwndText0,WM_GETTEXTLENGTH,0,0);
                         char *a=(char *)malloc((len+1)*sizeof(char));
@@ -465,6 +471,14 @@ LRESULT CALLBACK OutWindowProcedure(HWND hwnd,UINT message,WPARAM wParam,LPARAM 
                             ti->setfile(a);
                         }
                         free(a);
+                    }
+                    else if((HWND)lParam==hwndOBu03)//run again
+                    {
+                        item *ti=global_list->findnext(global_selline+global_scrolly_out);
+                        if(ti)
+                        {
+                            ti->runtest();
+                        }
                     }
                     break;
                 case EN_CHANGE:

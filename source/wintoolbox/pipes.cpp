@@ -2,6 +2,11 @@
 *                                                  *
 *  Pipes.                                          *
 *                                                  *
+*  ----------------------------------------------  *
+*                                                  *
+*  This file is part of TestMan!                   *
+*  Copyright 2015 by Andreas Pollhammer            *
+*                                                  *
 ***************************************************/
 #include "pipes.h"
 
@@ -9,19 +14,13 @@ void ErrorExit(const char *lpszFunction)
 {
     LPVOID lpMsgBuf;
     LPVOID lpDisplayBuf;
-    DWORD dw = GetLastError();
+    DWORD dw=GetLastError();
 
-    FormatMessage(
-        FORMAT_MESSAGE_ALLOCATE_BUFFER |
-        FORMAT_MESSAGE_FROM_SYSTEM |
-        FORMAT_MESSAGE_IGNORE_INSERTS,
-        NULL,
-        dw,
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),(LPTSTR) &lpMsgBuf,0, NULL );
+    FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,NULL,dw,MAKELANGID(LANG_NEUTRAL,SUBLANG_DEFAULT),(LPTSTR)&lpMsgBuf,0,NULL);
 
-    lpDisplayBuf = (LPVOID)LocalAlloc(LMEM_ZEROINIT,(lstrlen((LPCTSTR)lpMsgBuf)+lstrlen((LPCTSTR)lpszFunction)+40)*sizeof(TCHAR));
-    wsprintfA((LPTSTR)lpDisplayBuf,TEXT("Function %s failed with error %d:\n%s"),lpszFunction, dw, lpMsgBuf);
-    MessageBox(NULL, (LPCTSTR)lpDisplayBuf, TEXT("Error"), MB_OK);
+    lpDisplayBuf=(LPVOID)LocalAlloc(LMEM_ZEROINIT,(lstrlen((LPCTSTR)lpMsgBuf)+lstrlen((LPCTSTR)lpszFunction)+40)*sizeof(TCHAR));
+    wsprintfA((LPTSTR)lpDisplayBuf,TEXT("Function %s failed with error %d:\n%s"),lpszFunction,dw,lpMsgBuf);
+    MessageBox(NULL,(LPCTSTR)lpDisplayBuf,TEXT("Error"),MB_OK);
 
     LocalFree(lpMsgBuf);
     LocalFree(lpDisplayBuf);
@@ -181,17 +180,8 @@ PROCESS_INFORMATION CreateSubProcess(char *progname,HANDLE substdoutw,HANDLE sub
    siStartInfo.hStdOutput=substdoutw;
    siStartInfo.hStdInput=substdinr;
    siStartInfo.dwFlags=STARTF_USESTDHANDLES | STARTF_FORCEOFFFEEDBACK | STARTF_USESHOWWINDOW;
-   siStartInfo.wShowWindow=SW_HIDE;
-   bSuccess=CreateProcess(NULL,
-      progname,      // command line
-      NULL,          // process security attributes
-      NULL,          // primary thread security attributes
-      TRUE,          // handles are inherited
-      0,             // creation flags
-      NULL,          // use parent's environment
-      NULL,          // use parent's current directory
-      &siStartInfo,  // STARTUPINFO pointer
-      &piProcInfo);  // receives PROCESS_INFORMATION
+   siStartInfo.wShowWindow=SW_SHOW;
+   bSuccess=CreateProcess(NULL,progname,NULL,NULL,TRUE,0,NULL,NULL,&siStartInfo,&piProcInfo);
    if(!bSuccess)
    {
       ErrorExit("CreateProcess");
@@ -253,32 +243,39 @@ int xWriteToPipe(char *a,int u)
 }
 int xexecute(char *program,char *command)
 {
+    //-------------------------------------------------------------------------
+    //Different methods to create a new process.
+
+    //--(A)--------------------------------------------------------------------
     //*
-    STARTUPINFO si;
-    PROCESS_INFORMATION pi;
+    STARTUPINFO sinfo;
+    PROCESS_INFORMATION pinfo;
 
-    ZeroMemory( &si, sizeof(si) );
-    si.cb = sizeof(si);
-    ZeroMemory( &pi, sizeof(pi) );
+    ZeroMemory(&sinfo,sizeof(sinfo));
+    sinfo.cb=sizeof(sinfo);
+    ZeroMemory(&pinfo,sizeof(pinfo));
 
-    if(CreateProcess(program,command,NULL,NULL,false,0,NULL,NULL,&si,&pi))
+    if(CreateProcess(program,command,NULL,NULL,false,0,NULL,NULL,&sinfo,&pinfo))
     {
-        // Wait until child process exits.
-        WaitForSingleObject( pi.hProcess, INFINITE );
-
-        // Close process and thread handles.
-        CloseHandle( pi.hProcess );
-        CloseHandle( pi.hThread );
+        WaitForSingleObject(pinfo.hProcess,INFINITE);
+        CloseHandle(pinfo.hProcess);
+        CloseHandle(pinfo.hThread);
     }
     else
-    {//Fehler
+    {
+        //Error handling here.
     }
     //*/
 
+    //--(B)--------------------------------------------------------------------
     //CREATE_UNICODE_ENVIRONMENT
-    //WinExec(fn,1);
+    //WinExec(filename,1);
 
+    //--(C)--------------------------------------------------------------------
     //ShellExecute(hwnd,"open",command,NULL,NULL,5);
+
+    //--(D)--------------------------------------------------------------------
+    //system(command);
 
 	return 0;
 }

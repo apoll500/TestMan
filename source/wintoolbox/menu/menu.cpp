@@ -1,7 +1,12 @@
 /***************************************************
 *                                                  *
 *  Some functions supporting the creation          *
-*  and manipulation of menus and menu entrys.      *
+*  and manipulation of menus and menu entries.     *
+*                                                  *
+*  ----------------------------------------------  *
+*                                                  *
+*  This file is part of TestMan!                   *
+*  Copyright 2015 by Andreas Pollhammer            *
 *                                                  *
 ***************************************************/
 
